@@ -4,6 +4,47 @@
 // Este código inicial serve como base para o desenvolvimento do sistema de movimentação das peças de xadrez.
 // O objetivo é utilizar estruturas de repetição e funções para determinar os limites de movimentação dentro do jogo.
 
+// Função para imprimir um tabuleiro para a peça Cavalo
+
+void printTabuleiro(int cavaloColuna, int cavaloLinha) {
+    printf ("\n  A B C D E F G H\n");
+    for (int i =0; i < 8; i++) {
+        printf("%d ", 8 -i);
+        for (int j =0; j < 8; j++) {
+            if(i == cavaloColuna && j == cavaloLinha) {
+                printf("C ");  // 👈 'C' representa a peça cavalo no tabuleiro
+            } else {
+                printf ("- ");
+            }
+        }
+        printf("\n");
+    }
+}
+
+/* Essa função converte a entrada do usuário no formato 
+ * coordenadas de xadrez para cordenadas de matriz. 
+*/
+int conversorXadrez(char coluna, int linha, int *x, int *y) {
+    if (coluna <'A' || coluna >'H' || linha <1 || linha > 8) {
+        return 0;
+    }
+    *y = coluna - 'A';
+    *x = 8 - linha;
+
+    return 1;
+}
+
+// Verifica se a entrada do usuário é valida para a peça Cavalo
+int movimentoValidoCavalo(int colunaAtual, int LinhaAtual, int novaColuna, int novaLinha) {
+    int diferencaColuna = novaColuna - colunaAtual;
+    if (diferencaColuna < 0) diferencaColuna = -diferencaColuna;
+
+    int diferencaLinha = novaLinha - LinhaAtual;
+    if (diferencaLinha < 0) diferencaLinha = - diferencaLinha;
+
+    return (diferencaColuna == 2 && diferencaLinha == 1) || (diferencaColuna == 1 && diferencaLinha ==2 );
+}
+
 int main() {
     // Nível Novato - Movimentação das Peças
     // Sugestão: Declare variáveis constantes para representar o número de casas que cada peça pode se mover.
@@ -50,6 +91,33 @@ int main() {
     // Nível Aventureiro - Movimentação do Cavalo
     // Sugestão: Utilize loops aninhados para simular a movimentação do Cavalo em L.
     // Um loop pode representar a movimentação horizontal e outro vertical.
+
+    int cavaloColuna = 4, cavaloLinha = 4;
+    char coluna;
+    int linha;
+    int novaColuna, novaLinha;
+
+    printTabuleiro(cavaloColuna, cavaloLinha);
+
+    // Coletando a entrada do usuário para mover o cavalo
+    printf("\n Digite a posição para mover o cavalo (ex: F 6): ");
+    scanf(" %c %d", &coluna, &linha);
+
+    if(!conversorXadrez(coluna, linha, &novaColuna, &novaLinha)) {
+        printf("Coordenadas invalidas!");
+        return 0;
+    }
+
+    // validando entrada do usuário
+    if (movimentoValidoCavalo(cavaloColuna, cavaloLinha, novaColuna, novaLinha)) {
+        cavaloColuna = novaColuna;
+        cavaloLinha = novaLinha;
+    } else {
+        printf("Movimento invalido!\n");
+    }
+
+    printTabuleiro(cavaloColuna, cavaloLinha);
+
 
     // Nível Mestre - Funções Recursivas e Loops Aninhados
     // Sugestão: Substitua as movimentações das peças por funções recursivas.
